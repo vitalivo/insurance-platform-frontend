@@ -58,7 +58,7 @@ export function Header() {
             </Link>
             <div className="w-px h-8 bg-gray-300"></div>
             <Link
-              href="http://localhost:8000/admin/"
+              href="https://insurance-platform-nackend.onrender.com/admin/"
               target="_blank"
               className="btn-primary flex items-center space-x-2 px-4 py-2"
             >
