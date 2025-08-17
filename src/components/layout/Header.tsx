@@ -3,14 +3,21 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Menu, X, Shield, Phone, User } from "lucide-react"
+import { usePageContent } from "@/hooks/usePageContent"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { data: headerContent, isLoading } = usePageContent("header")
 
-  // Обновленная навигация с правильной ссылкой на продукты
+  // Вспомогательная функция для получения значения по ключу
+  const getContent = (section: string, key: string, defaultValue = "") => {
+    return headerContent?.[section]?.[key] || defaultValue
+  }
+
+  // Навигация из админки или по умолчанию
   const navigation = [
     { name: "Главная", href: "/" },
-    { name: "Продукты", href: "/products" }, // Изменено с "#products" на "/products"
+    { name: "Продукты", href: "/products" },
     { name: "Преимущества", href: "#features" },
     { name: "О нас", href: "#about" },
   ]
@@ -25,8 +32,10 @@ export function Header() {
               <Shield className="h-6 w-6 text-white" />
             </div>
             <div>
-              <span className="text-xl font-bold text-gray-900">СтрахПлатформа</span>
-              <div className="text-xs text-gray-500">Надежная защита</div>
+              <span className="text-xl font-bold text-gray-900">
+                {getContent("logo", "company_name", "СтрахПлатформа")}
+              </span>
+              <div className="text-xs text-gray-500">{getContent("logo", "tagline", "Надежная защита")}</div>
             </div>
           </Link>
 
@@ -47,23 +56,25 @@ export function Header() {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
-              href="tel:+78001234567"
+              href={`tel:${getContent("contacts", "phone_link", "+78001234567")}`}
               className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-blue-50"
             >
               <Phone className="h-4 w-4" />
               <div className="text-right">
-                <div className="text-sm font-medium">8 (800) 123-45-67</div>
-                <div className="text-xs text-gray-500">Бесплатно по России</div>
+                <div className="text-sm font-medium">{getContent("contacts", "phone", "8 (800) 123-45-67")}</div>
+                <div className="text-xs text-gray-500">
+                  {getContent("contacts", "phone_description", "Бесплатно по России")}
+                </div>
               </div>
             </Link>
             <div className="w-px h-8 bg-gray-300"></div>
             <Link
-              href="https://insurance-platform-nackend.onrender.com/admin/"
+              href={getContent("admin", "admin_url", "https://insurance-platform-nackend.onrender.com/admin/")}
               target="_blank"
               className="btn-primary flex items-center space-x-2 px-4 py-2"
             >
               <User className="h-4 w-4" />
-              <span>Личный кабинет</span>
+              <span>{getContent("admin", "admin_text", "Личный кабинет")}</span>
             </Link>
           </div>
 
@@ -92,22 +103,24 @@ export function Header() {
               ))}
               <div className="pt-4 border-t border-gray-200 space-y-3">
                 <Link
-                  href="tel:+78001234567"
+                  href={`tel:${getContent("contacts", "phone_link", "+78001234567")}`}
                   className="flex items-center space-x-3 px-3 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200"
                 >
                   <Phone className="h-5 w-5" />
                   <div>
-                    <div className="font-medium">8 (800) 123-45-67</div>
-                    <div className="text-sm text-gray-500">Бесплатно по России</div>
+                    <div className="font-medium">{getContent("contacts", "phone", "8 (800) 123-45-67")}</div>
+                    <div className="text-sm text-gray-500">
+                      {getContent("contacts", "phone_description", "Бесплатно по России")}
+                    </div>
                   </div>
                 </Link>
                 <Link
-                  href="https://insurance-platform-nackend.onrender.com/admin/"
+                  href={getContent("admin", "admin_url", "https://insurance-platform-nackend.onrender.com/admin/")}
                   target="_blank"
                   className="w-full btn-primary flex items-center justify-center space-x-2 py-3"
                 >
                   <User className="h-4 w-4" />
-                  <span>Личный кабинет</span>
+                  <span>{getContent("admin", "admin_text", "Личный кабинет")}</span>
                 </Link>
               </div>
             </div>
